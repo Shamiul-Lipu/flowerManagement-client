@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { useUpdateFlowerMutation } from "../../redux/features/flowerCrud/flowerCrudApi";
+import {
+  useAddFlowerMutation,
+  useUpdateFlowerMutation,
+} from "../../redux/features/flowerCrud/flowerCrudApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Flower } from "../FlowerCard/FlowerCard";
 
 interface UpdateModalProps {
-  flower: Partial<Flower>; // Replace `FlowerData` with the actual type of your flower data
-  handleModal: () => void; // Function type for handling modal visibility
+  flower: Partial<Flower>;
+  handleModal: () => void;
 }
 
 const UpdateModal: React.FC<UpdateModalProps> = ({ flower, handleModal }) => {
@@ -28,6 +31,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ flower, handleModal }) => {
   });
   const [flowerId, setFlowerId] = useState({});
   const [updateFlower] = useUpdateFlowerMutation(flowerId);
+  const [addFlower] = useAddFlowerMutation();
   const navigate = useNavigate();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,12 +66,30 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ flower, handleModal }) => {
     }));
   };
 
-  const onSubmit = () => {
-    // console.log(inputValues);
+  const handleUpdateOnSubmit = () => {
+    // console.log("update", inputValues);
     setFlowerId(inputValues.id as string);
     updateFlower(inputValues);
     handleModal();
     toast.success("Successfully updated", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    navigate("/");
+  };
+
+  const handleDuplicateOnSubmit = () => {
+    // console.log("duplicate", inputValues);
+    setFlowerId(inputValues.id as string);
+    addFlower(inputValues);
+    handleModal();
+    toast.success("Varient created successfully", {
       position: "top-center",
       autoClose: 3000,
       hideProgressBar: false,
@@ -86,13 +108,9 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ flower, handleModal }) => {
         <h3 className="text-center pt-10 font-bold text-2xl text-white">
           Update Flower
         </h3>
+
         <div className="flex justify-center items-center">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault(), onSubmit();
-            }}
-            className="mx-auto my-10 w-full max-w-[740px] rounded-xl border  bg-[#777a80] p-9 max-md:px-4 lg:my-20 lg:p-11"
-          >
+          <div className="mx-auto my-10 w-full max-w-[740px] rounded-xl border  bg-[#777a80] p-9 max-md:px-4 lg:my-20 lg:p-11">
             <div className="flex justify-center gap-3">
               <div className="">
                 <div>
@@ -330,10 +348,20 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ flower, handleModal }) => {
             </div>
             <div className=" flex justify-center items-center gap-5 ">
               <button
-                type="submit"
+                onClick={() => {
+                  handleUpdateOnSubmit();
+                }}
                 className="font-semibold text-sm px-4 py-2 text-black bg-green-200 rounded-md my-5 hover:bg-green-400 "
               >
                 Save update
+              </button>
+              <button
+                onClick={() => {
+                  handleDuplicateOnSubmit();
+                }}
+                className="font-semibold text-sm px-4 py-2 text-black bg-blue-200 rounded-md my-5 hover:bg-blue-400 "
+              >
+                Create Varient
               </button>
               <button
                 onClick={handleModal}
@@ -342,7 +370,7 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ flower, handleModal }) => {
                 Close
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

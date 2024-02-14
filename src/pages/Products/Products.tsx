@@ -57,7 +57,7 @@ const Products = () => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-1 pt-8">
-        {Array.from({ length: 9 }).map((_, i) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <div key={i} className="skeleton card bg-base-100 shadow-xl">
             <div className="skeleton card-body">
               <h2 className="skeleton card-title"></h2>
