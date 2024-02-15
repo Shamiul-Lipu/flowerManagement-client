@@ -8,6 +8,7 @@ type TAuthState = {
 
 export interface User {
   id: string;
+  username: string;
   email: string;
   exp: number;
   iat: number;

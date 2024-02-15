@@ -13,6 +13,7 @@ import { useCurrentUser } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { showConfirmationToast } from "../../utils/DeleteWarnToast";
 import DiscountCoupon from "../../components/DiscountCoupon/DiscountCoupon";
+import { TUser } from "../../types/global";
 
 const Products = () => {
   // const [selectedFlowers, setSelectedFlowers] = useState([]);
@@ -53,7 +54,7 @@ const Products = () => {
 
   const [bulkDeleteFlowerflower] = useBulkDeleteFlowerflowerMutation();
   const { data, isLoading } = useGetAllFlowersQuery(queryParams);
-  const user = useAppSelector(useCurrentUser);
+  const user = useAppSelector(useCurrentUser) as TUser;
 
   if (isLoading) {
     return (
@@ -90,7 +91,7 @@ const Products = () => {
       "Are you sure you want to delete?",
       () => {
         // Handle "Confirm" action
-        console.log("Bulk Delete Array:", selectedFlowers);
+        // console.log("Bulk Delete Array:", selectedFlowers);
         bulkDeleteFlowerflower(selectedFlowers);
         toast.success("Bulk Delete has been successfully done", {
           position: "top-center",
@@ -153,19 +154,17 @@ const Products = () => {
           >
             Show filters !
           </button>
-          <button
-            onClick={() => {
-              user
-                ? handleBulkDelete()
-                : toast.info(
-                    "To access this functionality, users must be registered"
-                  );
-            }}
-            className="btn btn-error bg-red-950 text-white tooltip tooltip-bottom"
-            data-tip="card checkbox-select and delete multiple items"
-          >
-            Bulk delete!
-          </button>
+          {user?.role === "manager" && (
+            <button
+              onClick={() => {
+                handleBulkDelete();
+              }}
+              className="btn btn-error bg-red-950 text-white tooltip tooltip-bottom"
+              data-tip="card checkbox-select and delete multiple items"
+            >
+              Bulk delete!
+            </button>
+          )}
         </div>
 
         {/* display flower products */}

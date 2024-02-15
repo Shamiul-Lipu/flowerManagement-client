@@ -4,4 +4,5 @@ export type TUser = {
   iat: number;
   id: string;
   role: string;
+  username: string;
 };

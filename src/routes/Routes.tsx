@@ -6,6 +6,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
 import AddFlower from "../pages/AddFlower/AddFlower";
 import DashboardLayout from "../components/layout/DashboardLayout";
+import ManagerRoute from "../components/layout/ManagerRoute";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
       },
       {
         path: "addFlower",
-        element: <AddFlower />,
+        element: (
+          <ManagerRoute role="manager">
+            <AddFlower />
+          </ManagerRoute>
+        ),
       },
     ],
   },

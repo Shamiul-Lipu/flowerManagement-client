@@ -28,11 +28,20 @@ const salesApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    createCoupon: builder.mutation({
+      query: (data) => ({
+        url: `/flowerManagment/create-coupon`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["discountCoupone"],
+    }),
     getDiscountCoupon: builder.query({
       query: () => ({
         url: `/flowerManagment/get-coupon`,
         method: "GET",
       }),
+      providesTags: ["discountCoupone"],
     }),
   }),
 });
@@ -42,5 +51,6 @@ export const {
   useTodaysSalesHistoryQuery,
   useLastWeeksalesQuery,
   useMonthAndYearlySalesHistoryQuery,
+  useCreateCouponMutation,
   useGetDiscountCouponQuery,
 } = salesApi;
