@@ -5,17 +5,19 @@ import {
   useRegisterMutation,
 } from "../../redux/features/auth/authApi";
 import { jwtDecode } from "jwt-decode";
-import { setUser } from "../../redux/features/auth/authSlice";
-import { useAppDispatch } from "../../redux/hooks";
+import { setUser, useCurrentUser } from "../../redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { toast } from "react-toastify";
+import { TUser } from "../../types/global";
 
 const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    role: "user",
+    role: "member",
   });
+  const user = useAppSelector(useCurrentUser) as TUser;
   const [register] = useRegisterMutation();
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
@@ -33,9 +35,10 @@ const Register = () => {
   };
 
   const onSubmit = async () => {
+    console.log(formData);
     const id = toast.loading("Please wait...", { theme: "dark" });
     const res = await register(formData).unwrap();
-    // console.log(res);
+    // // console.log(res);
     if (res.statusCode === 201 && res.success === true) {
       try {
         const res = await login(formData).unwrap();
@@ -113,6 +116,26 @@ const Register = () => {
                 placeholder="Email"
                 className="input input-bordered w-full max-w-xs"
               />
+            </label>
+          </div>
+          <div>
+            <label
+              className={`form-control w-full max-w-xs ${
+                user ? "block" : "hidden"
+              }`}
+            >
+              <div className="label">
+                <span className="label-text font-semibold">Role :</span>
+              </div>
+              <select
+                className="block w-full cursor-pointer rounded-md px-3 py-2.5 border-gray-200 border-2"
+                name="role"
+                value={formData.role}
+                onChange={handleOnChange}
+              >
+                <option value={"manager"}>Manager</option>
+                <option value={"salesman"}>Seller</option>
+              </select>
             </label>
           </div>
           <div>

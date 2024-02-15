@@ -12,7 +12,7 @@ interface SellModalProps {
 }
 
 interface FormData {
-  sellerUserId: string;
+  sellerUserId?: string;
   productId: string;
   saleDate: string;
   buyer: string;
@@ -23,7 +23,7 @@ interface FormData {
 const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
   const user = useAppSelector(useCurrentUser);
   const [formData, setFormData] = useState<FormData>({
-    sellerUserId: (user as { id: string }).id,
+    sellerUserId: (user as { id: string })?.id,
     productId: flower._id as string,
     saleDate: "",
     buyer: "",
@@ -77,20 +77,20 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
     const formDataToSubmit = {
       ...formData,
     };
-    // console.log(formDataToSubmit);
-    createSales(formDataToSubmit);
-    toast.success("Sale created successfully", {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    navigate("/");
-    handleModal();
+    console.log(formDataToSubmit);
+    // createSales(formDataToSubmit);
+    // toast.success("Sale created successfully", {
+    //   position: "top-center",
+    //   autoClose: 3000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    //   theme: "light",
+    // });
+    // navigate("/");
+    // handleModal();
   };
 
   return (
@@ -158,12 +158,21 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
         </div>
 
         <div className="mt-16 flex justify-center lg:mt-20 gap-2">
-          <button
-            type="submit"
-            className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
-          >
-            Initiate the sale
-          </button>
+          {user ? (
+            <button
+              type="submit"
+              className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
+            >
+              Initiate the sale
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
+            >
+              Confirm purchase
+            </button>
+          )}
           <button
             onClick={handleModal}
             className="rounded bg-red-400 px-4 py-2 text-white transition-all hover:opacity-80"

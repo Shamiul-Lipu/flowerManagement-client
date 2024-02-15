@@ -2,10 +2,11 @@ import { NavLink } from "react-router-dom";
 import mainLogo from "../../assets/shop.png";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { logout, useCurrentUser } from "../../redux/features/auth/authSlice";
+import { TUser } from "../../types/global";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(useCurrentUser);
+  const user = useAppSelector(useCurrentUser) as TUser;
 
   return (
     <div className="navbar bg-neutral text-neutral-content flex-col justify-center gap-2 md:flex-row md:justify-between py-5 px-2 rounded-b-lg">
@@ -18,13 +19,24 @@ const Navbar = () => {
       </NavLink>
       <div className="">
         <ul className="flex justify-center items-center gap-1 font-semibold md:gap-6">
-          {user ? (
+          {user?.role === "salesman" && (
+            <li>
+              <NavLink
+                to={"/user/dashboard"}
+                className="btn btn-active hover:bg-lime-100"
+              >
+                Dashboard
+              </NavLink>
+            </li>
+          )}
+          {user?.role === "manager" ? (
             <>
               <li className="border-b-2 hover:text-lime-100 hover:border-b-lime-300">
                 <NavLink to={"/user/addFlower"} className="btn btn-ghost">
                   Add Flower
                 </NavLink>
               </li>
+
               <li>
                 <NavLink
                   to={"/user/dashboard"}
@@ -34,14 +46,26 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li>
-                <button
-                  onClick={() => dispatch(logout())}
+                <NavLink
+                  to={"/register"}
                   className="btn btn-outline text text-gray-300 border-gray-400"
                 >
-                  Logout
-                </button>
+                  Register
+                </NavLink>
               </li>
             </>
+          ) : (
+            <></>
+          )}
+          {user ? (
+            <li>
+              <button
+                onClick={() => dispatch(logout())}
+                className="btn btn-outline text text-gray-300 border-gray-400"
+              >
+                Logout
+              </button>
+            </li>
           ) : (
             <>
               <li>
@@ -49,7 +73,8 @@ const Navbar = () => {
                   to={"/register"}
                   className="btn btn-outline text text-gray-300 border-gray-400"
                 >
-                  Register
+                  Become a Member
+                  <div className="badge badge-accent">Redeem Discount %</div>
                 </NavLink>
               </li>
               <li>
