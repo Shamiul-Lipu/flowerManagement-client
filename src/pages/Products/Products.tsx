@@ -12,6 +12,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { useCurrentUser } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { showConfirmationToast } from "../../utils/DeleteWarnToast";
+import DiscountCoupon from "../../components/DiscountCoupon/DiscountCoupon";
 
 const Products = () => {
   // const [selectedFlowers, setSelectedFlowers] = useState([]);
@@ -132,6 +133,7 @@ const Products = () => {
   return (
     <>
       <div>
+        <DiscountCoupon />
         <FilterAndSearch
           handleSelectChange={handleSelectChange}
           setShowFilter={setShowFilter}
@@ -165,6 +167,8 @@ const Products = () => {
             Bulk delete!
           </button>
         </div>
+
+        {/* display flower products */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-1">
           {data?.data?.map((flower: PartialFlowerId) => (
             <FlowerCard

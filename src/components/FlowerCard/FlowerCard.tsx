@@ -82,7 +82,7 @@ const FlowerCard: React.FC<FlowerCardProps> = ({
           handleModal={() => setShowSellsModal(false)}
         />
       )}
-      <div className="card  shadow-xl bg-slate-100">
+      <div className="card  shadow-xl bg-gradient-to-tr from-lime-50 to-indigo-100">
         <div className="card-body">
           <div className="flex justify-end gap-2">
             {flower._id && (

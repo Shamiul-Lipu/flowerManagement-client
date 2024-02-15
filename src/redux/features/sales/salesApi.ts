@@ -28,6 +28,12 @@ const salesApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getDiscountCoupon: builder.query({
+      query: () => ({
+        url: `/flowerManagment/get-coupon`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -36,4 +42,5 @@ export const {
   useTodaysSalesHistoryQuery,
   useLastWeeksalesQuery,
   useMonthAndYearlySalesHistoryQuery,
+  useGetDiscountCouponQuery,
 } = salesApi;

@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { useCurrentUser } from "../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../redux/hooks";
-import { useCreateSalesMutation } from "../../redux/features/sales/salesApi";
+import {
+  useCreateSalesMutation,
+  useGetDiscountCouponQuery,
+} from "../../redux/features/sales/salesApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Flower } from "../FlowerCard/FlowerCard";
+import DiscountCoupon from "../DiscountCoupon/DiscountCoupon";
+import { applyDiscount } from "../../utils/applyDiscount";
 
 interface SellModalProps {
   flower: Partial<Flower>;
@@ -30,9 +35,11 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
     quantitySold: "",
     totalAmount: 0,
   });
+  const [discountCode, setDiscountCode] = useState("");
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [createSales] = useCreateSalesMutation();
+  const { data: coupon } = useGetDiscountCouponQuery(undefined);
   const navigate = useNavigate();
-  // console.log(data);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
@@ -50,6 +57,7 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
         [name]: value,
         totalAmount: totalAmount,
       };
+      setButtonDisabled(false);
     }
 
     let isValid = true;
@@ -57,10 +65,8 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
       // Validate the entered date format (YYYY-MM-DD)
       isValid = /\d{4}-\d{2}-\d{2}/.test(value);
 
-      // Optionally, handle the case where the date is not valid
       if (!isValid) {
         console.error("Invalid date format");
-        // Optionally, you can return or take other actions for invalid date
       }
     }
     updatedFormData = {
@@ -68,29 +74,38 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
       [name]: value,
     };
 
-    // Update the state with the accumulated changes
     setFormData(updatedFormData);
   };
-  // console.log(user);
 
   const onSubmit = async () => {
     const formDataToSubmit = {
       ...formData,
     };
-    console.log(formDataToSubmit);
-    // createSales(formDataToSubmit);
-    // toast.success("Sale created successfully", {
-    //   position: "top-center",
-    //   autoClose: 3000,
-    //   hideProgressBar: false,
-    //   closeOnClick: true,
-    //   pauseOnHover: true,
-    //   draggable: true,
-    //   progress: undefined,
-    //   theme: "light",
-    // });
-    // navigate("/");
-    // handleModal();
+    // console.log(formDataToSubmit);
+    createSales(formDataToSubmit);
+    toast.success("Sale created successfully", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    navigate("/");
+    handleModal();
+  };
+
+  const handleDiscount = () => {
+    const discounted = applyDiscount(
+      coupon?.data,
+      discountCode,
+      formData?.totalAmount
+    );
+    formData.totalAmount = discounted;
+    // console.log(discounted);
+    setButtonDisabled(true);
   };
 
   return (
@@ -104,16 +119,40 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
         <h2 className="mb-9 text-center text-2xl font-bold text-white lg:mb-11 lg:text-[28px]">
           Sells dash
         </h2>
-        <h3 className="mb-9 text-center text-lg font-semibold text-gray-400 lg:mb-11">
-          {flower.name}has a total of{" "}
-          <span className="text-white">{flower.quantity}</span> units accessible
-          and each unit is priced at{" "}
-          <span className="text-white">{flower.price} $</span>
+        <DiscountCoupon />
+        <h3 className="mb-9 text-center text-lg font-semibold text-gray-400 lg:mb-11 mt-1">
+          {flower?.name}has a total of{" "}
+          <span className="text-white">{flower?.quantity}</span> units
+          accessible and each unit is priced at{" "}
+          <span className="text-white">{flower?.price} $</span>
         </h3>
         <br />
-        {formData.totalAmount !== undefined && !isNaN(formData.totalAmount) && (
-          <p className="text-white pb-3">Total: {formData.totalAmount} $</p>
-        )}
+        <div>
+          {formData.totalAmount !== undefined &&
+            !isNaN(formData?.totalAmount) && (
+              <span className="text-white pb-3 mr-2">
+                Total: {formData?.totalAmount} $
+              </span>
+            )}
+
+          <input
+            className="text-white rounded-md bg-[#2D323F] px-3 py-2.5 mx-2"
+            type="text"
+            name="discountCode"
+            value={discountCode}
+            onChange={(e) => {
+              setDiscountCode(e.target.value);
+            }}
+            placeholder="Coupon Code"
+          />
+          <button
+            onClick={handleDiscount}
+            disabled={isButtonDisabled}
+            className="btn btn-success text-white"
+          >
+            Calculate discount
+          </button>
+        </div>
 
         <div className="space-y-9 text-white lg:space-y-1">
           <div className="space-y-2 lg:space-y-3">
@@ -123,7 +162,7 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
               type="text"
               name="buyer"
               required
-              value={formData.buyer}
+              value={formData?.buyer}
               onChange={handleInputChange}
             />
           </div>
@@ -134,11 +173,11 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
               className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5"
               type="number"
               name="quantitySold"
-              max={flower.quantity}
+              max={flower?.quantity}
               min="1"
-              placeholder={`max quntity ${flower.quantity}`}
+              placeholder={`max quntity ${flower?.quantity}`}
               required
-              value={formData.quantitySold}
+              value={formData?.quantitySold}
               onChange={handleInputChange}
             />
           </div>
@@ -146,7 +185,7 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
             <label htmlFor="title">Sales Date:</label>
             <input
               name="saleDate"
-              value={formData.saleDate}
+              value={formData?.saleDate}
               pattern="\d{4}-\d{2}-\d{2}"
               placeholder="YYYY-MM-DD 2023-01-28"
               onChange={handleInputChange}
