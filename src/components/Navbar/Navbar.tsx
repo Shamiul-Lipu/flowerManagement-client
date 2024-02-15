@@ -50,7 +50,9 @@ const Navbar = () => {
                   to={"/register"}
                   className="btn btn-outline text text-gray-300 border-gray-400"
                 >
-                  Register
+                  <small>
+                    Create <br /> Seller/Manager
+                  </small>
                 </NavLink>
               </li>
             </>

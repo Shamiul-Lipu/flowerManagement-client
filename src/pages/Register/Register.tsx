@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
+  useCreateSalesmanOrManagerMutation,
   useLoginMutation,
-  useRegisterMutation,
+  useRegisterMemberMutation,
 } from "../../redux/features/auth/authApi";
 import { jwtDecode } from "jwt-decode";
 import { setUser, useCurrentUser } from "../../redux/features/auth/authSlice";
@@ -18,7 +19,8 @@ const Register = () => {
     role: "member",
   });
   const user = useAppSelector(useCurrentUser) as TUser;
-  const [register] = useRegisterMutation();
+  const [registerMember] = useRegisterMemberMutation();
+  const [createSalesmanOrManager] = useCreateSalesmanOrManagerMutation();
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -35,45 +37,82 @@ const Register = () => {
   };
 
   const onSubmit = async () => {
-    console.log(formData);
     const id = toast.loading("Please wait...", { theme: "dark" });
-    const res = await register(formData).unwrap();
-    // // console.log(res);
-    if (res.statusCode === 201 && res.success === true) {
-      try {
-        const res = await login(formData).unwrap();
-        // console.log(res);
-        const user = jwtDecode(res.data.token);
-        // console.log(user);
-        dispatch(setUser({ user: user, token: res.data.token }));
-        toast.update(id, {
-          render: "Register successful!",
-          type: "success",
-          isLoading: false,
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        navigate("/");
-      } catch (err) {
-        toast.update(id, {
-          render: "Rejected!",
-          type: "error",
-          isLoading: false,
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+    if (formData.role === "manager" || formData.role === "salesman") {
+      // console.log(formData);
+      const res = await createSalesmanOrManager(formData).unwrap();
+      if (res.statusCode === 201 && res.success === true) {
+        try {
+          toast.update(id, {
+            render: "Register successful!",
+            type: "success",
+            isLoading: false,
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          navigate("/");
+        } catch (err) {
+          toast.update(id, {
+            render: "Rejected!",
+            type: "error",
+            isLoading: false,
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }
+    }
+
+    if (formData.role === "member") {
+      const res = await registerMember(formData).unwrap();
+      if (res.statusCode === 201 && res.success === true) {
+        try {
+          const res = await login(formData).unwrap();
+          // console.log(res);
+          const user = jwtDecode(res.data.token);
+          // console.log(user);
+          dispatch(setUser({ user: user, token: res.data.token }));
+          toast.update(id, {
+            render: "Register successful!",
+            type: "success",
+            isLoading: false,
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          navigate("/");
+        } catch (err) {
+          toast.update(id, {
+            render: "Rejected!",
+            type: "error",
+            isLoading: false,
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       }
     }
   };
@@ -99,6 +138,7 @@ const Register = () => {
                 onChange={handleOnChange}
                 type="text"
                 placeholder="Username"
+                required
                 className="input input-bordered w-full max-w-xs"
               />
             </label>
@@ -114,6 +154,7 @@ const Register = () => {
                 onChange={handleOnChange}
                 type="email"
                 placeholder="Email"
+                required
                 className="input input-bordered w-full max-w-xs"
               />
             </label>
@@ -133,6 +174,7 @@ const Register = () => {
                 value={formData.role}
                 onChange={handleOnChange}
               >
+                <option value={""}>Select Role</option>
                 <option value={"manager"}>Manager</option>
                 <option value={"salesman"}>Seller</option>
               </select>
@@ -149,6 +191,7 @@ const Register = () => {
                 onChange={handleOnChange}
                 type="password"
                 placeholder="Password"
+                required
                 className="input input-bordered w-full max-w-xs"
               />
             </label>

@@ -11,9 +11,18 @@ const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["flowers"],
     }),
 
-    register: builder.mutation({
+    registerMember: builder.mutation({
       query: (userInfo) => ({
-        url: "/auth/register",
+        url: "/auth/registerMember",
+        method: "POST",
+        body: userInfo,
+      }),
+      invalidatesTags: ["flowers"],
+    }),
+
+    createSalesmanOrManager: builder.mutation({
+      query: (userInfo) => ({
+        url: "/auth/create-salesmanOrManager",
         method: "POST",
         body: userInfo,
       }),
@@ -22,4 +31,8 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const {
+  useLoginMutation,
+  useRegisterMemberMutation,
+  useCreateSalesmanOrManagerMutation,
+} = authApi;
