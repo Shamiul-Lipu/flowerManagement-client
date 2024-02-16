@@ -13,6 +13,7 @@ export interface User {
   exp: number;
   iat: number;
   role: string;
+  purchesPoints: number;
 }
 
 const initialState: TAuthState = {

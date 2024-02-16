@@ -5,4 +5,5 @@ export type TUser = {
   id: string;
   role: string;
   username: string;
+  purchesPoints?: number;
 };

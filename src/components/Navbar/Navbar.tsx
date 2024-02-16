@@ -19,7 +19,7 @@ const Navbar = () => {
       </NavLink>
       <div className="">
         <ul className="flex justify-center items-center gap-1 font-semibold md:gap-6">
-          {user?.role === "salesman" && (
+          {user && (
             <li>
               <NavLink
                 to={"/user/dashboard"}
@@ -34,15 +34,6 @@ const Navbar = () => {
               <li className="border-b-2 hover:text-lime-100 hover:border-b-lime-300">
                 <NavLink to={"/user/addFlower"} className="btn btn-ghost">
                   Add Flower
-                </NavLink>
-              </li>
-
-              <li>
-                <NavLink
-                  to={"/user/dashboard"}
-                  className="btn btn-active hover:bg-lime-100"
-                >
-                  Dashboard
                 </NavLink>
               </li>
               <li>

@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import DailyAndWeelyStat from "../../components/DailyAndWeelyStat/DailyAndWeelyStat";
 import SearchYearSell from "../../components/SearchYearSell/SearchYearSell";
 import YearAndMonthlySales from "../../components/YearAndMonthlySales/YearAndMonthlySales";
-import { useMonthAndYearlySalesHistoryQuery } from "../../redux/features/sales/salesApi";
+import {
+  useMemberPurchesPointsQuery,
+  useMonthAndYearlySalesHistoryQuery,
+} from "../../redux/features/sales/salesApi";
 import YearlySalesHistory from "../../components/YearAndMonthlySales/YearlySalesHistory";
 import { useAppSelector } from "../../redux/hooks";
 import { useCurrentUser } from "../../redux/features/auth/authSlice";
@@ -14,7 +17,8 @@ const Dashboard = () => {
   const [year, setYear] = useState(2024);
   const { data, isLoading } = useMonthAndYearlySalesHistoryQuery(year);
   const user = useAppSelector(useCurrentUser) as TUser;
-
+  const { data: userPurchesPoint } = useMemberPurchesPointsQuery(undefined);
+  // console.log(userPurchesPoint);
   const handleInputChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -46,7 +50,10 @@ const Dashboard = () => {
     <>
       <div className="w-full bg-gray-700 py-2 my-2 rounded-md flex justify-center items-center">
         <h3 className="text-white font-bold">
-          Username: {user?.username}, Role: {user?.role}
+          Username: {user?.username}, Role: {user?.role} <br />
+          {user?.role === "member" && (
+            <span> Purches Points: {userPurchesPoint?.data}</span>
+          )}
         </h3>
       </div>
       {user?.role === "manager" && <CreateCoupone />}

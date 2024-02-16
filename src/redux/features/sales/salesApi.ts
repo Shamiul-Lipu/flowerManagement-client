@@ -8,7 +8,14 @@ const salesApi = baseApi.injectEndpoints({
         method: "POST",
         body: sells,
       }),
-      invalidatesTags: ["flowers"],
+      invalidatesTags: ["flowers", "purchesPoint"],
+    }),
+    memberPurchesPoints: builder.query({
+      query: () => ({
+        url: "/flowerManagment/memberPurchesPoints",
+        method: "GET",
+      }),
+      providesTags: ["purchesPoint"],
     }),
     todaysSalesHistory: builder.query({
       query: () => ({
@@ -53,4 +60,5 @@ export const {
   useMonthAndYearlySalesHistoryQuery,
   useCreateCouponMutation,
   useGetDiscountCouponQuery,
+  useMemberPurchesPointsQuery,
 } = salesApi;
