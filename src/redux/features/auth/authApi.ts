@@ -8,7 +8,12 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
-      invalidatesTags: ["flowers"],
+      invalidatesTags: [
+        "flowers",
+        "getMyPurchesHistory",
+        "purchesPoint",
+        "discountCoupone",
+      ],
     }),
 
     registerMember: builder.mutation({
@@ -17,7 +22,12 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
-      invalidatesTags: ["flowers"],
+      invalidatesTags: [
+        "flowers",
+        "getMyPurchesHistory",
+        "purchesPoint",
+        "discountCoupone",
+      ],
     }),
 
     createSalesmanOrManager: builder.mutation({

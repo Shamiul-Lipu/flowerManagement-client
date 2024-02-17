@@ -11,6 +11,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { useCurrentUser } from "../../redux/features/auth/authSlice";
 import { TUser } from "../../types/global";
 import CreateCoupone from "../../components/CreateCoupone/CreateCoupone";
+import PurchesHistory from "../../components/PurchesHistory/PurchesHistory";
 
 const Dashboard = () => {
   const [input, setInput] = useState("");
@@ -57,6 +58,8 @@ const Dashboard = () => {
         </h3>
       </div>
       {user?.role === "manager" && <CreateCoupone />}
+      {user?.role === "member" && <PurchesHistory />}
+      {user?.role === "salesman" && <PurchesHistory />}
       <h3 className="text-center font-bold py-8 text-2xl">
         Sales History Dashboard
       </h3>

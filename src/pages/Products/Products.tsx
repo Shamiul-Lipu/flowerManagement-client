@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { showConfirmationToast } from "../../utils/DeleteWarnToast";
 import DiscountCoupon from "../../components/DiscountCoupon/DiscountCoupon";
 import { TUser } from "../../types/global";
+import Spinner from "../../utils/Spinner";
 
 const Products = () => {
   // const [selectedFlowers, setSelectedFlowers] = useState([]);
@@ -53,7 +54,7 @@ const Products = () => {
   };
 
   const [bulkDeleteFlowerflower] = useBulkDeleteFlowerflowerMutation();
-  const { data, isLoading } = useGetAllFlowersQuery(queryParams);
+  const { data, isLoading, isFetching } = useGetAllFlowersQuery(queryParams);
   const user = useAppSelector(useCurrentUser) as TUser;
 
   if (isLoading) {
@@ -166,6 +167,8 @@ const Products = () => {
             </button>
           )}
         </div>
+
+        {isFetching && <Spinner />}
 
         {/* display flower products */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-1">

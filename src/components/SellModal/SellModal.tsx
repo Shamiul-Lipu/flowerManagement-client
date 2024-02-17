@@ -149,6 +149,11 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
                 Total: {formData?.totalAmount} $
               </span>
             )}
+          {isButtonDisabled && (
+            <small className="text-amber-200 ml-1">
+              Re-adjust the quantity to update the total amount and discount.
+            </small>
+          )}
           <div className="space-y-3">
             <input
               className="text-white rounded-md bg-[#2D323F] px-3 py-2.5 mr-2"
@@ -181,9 +186,8 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
             <div className="space-y-3">
               <input
                 className="text-black rounded-md bg-[#606266] px-3 py-2.5 mr-2"
-                type="text"
                 disabled={true}
-                placeholder={`Redeem: ${user?.purchesPoints}% discount`}
+                placeholder={`Redeem: ${userPurchesPoint?.data}% discount`}
               />
               <button
                 onClick={() => {
@@ -191,7 +195,7 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
                     coupon?.data,
                     discountCode,
                     formData?.totalAmount,
-                    user?.purchesPoints
+                    userPurchesPoint?.data
                   );
                   formData.totalAmount = newAmount as number;
                   setRedeemPointUsed(redeemDiscount);
@@ -252,15 +256,6 @@ const SellModal: React.FC<SellModalProps> = ({ flower, handleModal }) => {
         </div>
 
         <div className="mt-16 flex justify-center lg:mt-20 gap-2">
-          {user?.role === "salesmen" && (
-            <button
-              type="submit"
-              className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
-            >
-              Initiate the sale
-            </button>
-          )}
-
           <button
             type="submit"
             className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80 tooltip  tooltip-top  tooltip-info"

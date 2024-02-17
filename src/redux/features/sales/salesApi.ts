@@ -8,7 +8,14 @@ const salesApi = baseApi.injectEndpoints({
         method: "POST",
         body: sells,
       }),
-      invalidatesTags: ["flowers", "purchesPoint"],
+      invalidatesTags: [
+        "flowers",
+        "purchesPoint",
+        "getMyPurchesHistory",
+        "todaysSalesHistory",
+        "lastWeeksales",
+        "monthAndYearlySalesHistory",
+      ],
     }),
     memberPurchesPoints: builder.query({
       query: () => ({
@@ -22,18 +29,21 @@ const salesApi = baseApi.injectEndpoints({
         url: "/flowerManagment/todaysSalesHistory",
         method: "GET",
       }),
+      providesTags: ["todaysSalesHistory"],
     }),
     lastWeeksales: builder.query({
       query: () => ({
         url: "/flowerManagment/lastWeeksales",
         method: "GET",
       }),
+      providesTags: ["lastWeeksales"],
     }),
     monthAndYearlySalesHistory: builder.query({
       query: (year) => ({
         url: `/flowerManagment/monthAndYearlySalesHistory/${year}`,
         method: "GET",
       }),
+      providesTags: ["monthAndYearlySalesHistory"],
     }),
     createCoupon: builder.mutation({
       query: (data) => ({
@@ -50,6 +60,13 @@ const salesApi = baseApi.injectEndpoints({
       }),
       providesTags: ["discountCoupone"],
     }),
+    getMyPurchesHistory: builder.query({
+      query: () => ({
+        url: `/flowerManagment/getMyPurchesHistory`,
+        method: "GET",
+      }),
+      providesTags: ["getMyPurchesHistory"],
+    }),
   }),
 });
 
@@ -61,4 +78,5 @@ export const {
   useCreateCouponMutation,
   useGetDiscountCouponQuery,
   useMemberPurchesPointsQuery,
+  useGetMyPurchesHistoryQuery,
 } = salesApi;

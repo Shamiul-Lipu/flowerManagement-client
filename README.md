@@ -4,8 +4,9 @@ This application is aims to create a Flower Management Dashboard with features l
 
 #### Hosted on Vercel
 
-Server: [https://flower-management-dashboard-server.vercel.app]
-Client: [https://flower-management-client-theta.vercel.app]
+Server: [https://flower-management-dashboard-server-new.vercel.app]
+
+Client: [https://flower-dashboard-management-client-new.vercel.app]
 
 ### Prerequisites
 
@@ -17,7 +18,7 @@ Before running the application, ensure you have the following installed in your 
 
 ### Installation
 
-1. Clone or download the Server repository from [https://github.com/Porgramming-Hero-web-course/l2b2-full-stack-a5-client-side-Shamiul-Lipu].
+1. Clone or download the Server repository from [https://github.com/Porgramming-Hero-web-course/l2-b2-assignment-6-fronten-Shamiul-Lipu].
 
 -This git repo is private now.
 
@@ -25,13 +26,13 @@ Before running the application, ensure you have the following installed in your 
 This command clones a repository from GitHub to your local machine.
 
 ```bash
-   git clone Porgramming-Hero-web-course/l2b2-full-stack-a5-client-side-Shamiul-Lipu
+   git clone Porgramming-Hero-web-course/l2-b2-assignment-6-fronten-Shamiul-Lipu
 ```
 
 2. Navigate to the project directory in your terminal.
 
 ```bash
-   cd l2b2-full-stack-a5-client-side-Shamiul-Lipu
+   cd l2-b2-assignment-6-fronten-Shamiul-Lipu
 ```
 
 or it might be
@@ -99,21 +100,28 @@ If you encounter any issues while running the application, try the following ste
 #### My Server is Hosted on Vercel
 
 You can also access the API from the following link:
-Server: [https://flower-management-dashboard-server.vercel.app]
-Client: [https://flower-management-client-theta.vercel.app]
+
+Server: [https://flower-management-dashboard-server-new.vercel.app]
+
+Client: [https://flower-dashboard-management-client-new.vercel.app]
 
 The API endpoints and their usages are documented below:
 
-|                                | Authorization                     | Method | Route                                                   |
-| :----------------------------- | :-------------------------------- | :----- | :------------------------------------------------------ |
-| User Registration              |                                   | POST   | `/api/auth/register`                                    |
-| User Login                     |                                   | POST   | `/api/auth/login`                                       |
-| Refresh token                  |                                   | POST   | `/api/auth/refresh-token`                               |
-| Get All Flower                 |                                   | GET    | `/api/flowers`                                          |
-| Create a Course                | `Authorization: <USER_JWT_TOKEN>` | POST   | `/api/flowers/add-flowers`                              |
-| Update Flower                  | `Authorization: <USER_JWT_TOKEN>` | PUT    | `/api/flowers/update-flower/:flowerId`                  |
-| BULK Delete Flower             | `Authorization: <USER_JWT_TOKEN>` | PUT    | `/api/flowers/bulkDeleteFlowerflower"`                  |
-| Create Sales                   | `Authorization: <USER_JWT_TOKEN>` | POST   | `/api/flowerManagment/create-sales`                     |
-| Last Week sales History        | `Authorization: <USER_JWT_TOKEN>` | GET    | `/api/flowerManagment/lastWeeksales`                    |
-| Todays Sales History           | `Authorization: <USER_JWT_TOKEN>` | GET    | `/api/flowerManagment/todaysSalesHistory`               |
-| Month And Yearly Sales History | `Authorization: <USER_JWT_TOKEN>` | GET    | `/api/flowerManagment/monthAndYearlySalesHistory/:year` |
+|                                | Authorization                                  | Method | Route                                                   |
+| :----------------------------- | :--------------------------------------------- | :----- | :------------------------------------------------------ |
+| Become a member                |                                                | POST   | `/api/auth/registerMember`                              |
+| Create Manager or Salesman     | `Authorization: <Manager_JWT_TOKEN>`           | POST   | `/api/auth/create-salesmanOrManager`                    |
+| User Login                     |                                                | POST   | `/api/auth/login`                                       |
+| Refresh token                  |                                                | POST   | `/api/auth/refresh-token`                               |
+| Get All Flower                 |                                                | GET    | `/api/flowers`                                          |
+| Add Flower                     | `Authorization: <Manager_JWT_TOKEN>`           | POST   | `/api/flowers/add-flowers`                              |
+| Update Flower                  | `Authorization: <Manager_JWT_TOKEN>`           | PUT    | `/api/flowers/update-flower/:flowerId`                  |
+| Delete Flower                  | `Authorization: <Manager_JWT_TOKEN>`           | PUT    | `/api/flowers//delete-flower/:flowerId`                 |
+| BULK Delete Flower             | `Authorization: <Manager_JWT_TOKEN>`           | PUT    | `/api/flowers/bulkDeleteFlowerflower"`                  |
+| Create Sales                   |                                                | POST   | `/api/flowerManagment/create-sales`                     |
+| Last Week sales History        | `Authorization: <Salesmen, Manager_JWT_TOKEN>` | GET    | `/api/flowerManagment/lastWeeksales`                    |
+| Todays Sales History           | `Authorization: <Salesmen, Manager_JWT_TOKEN>` | GET    | `/api/flowerManagment/todaysSalesHistory`               |
+| Month And Yearly Sales History | `Authorization: <Salesmen, Manager_JWT_TOKEN>` | GET    | `/api/flowerManagment/monthAndYearlySalesHistory/:year` |
+| Member Purches Points          | `Authorization: <Member_JWT_TOKEN>`            | GET    | `/api/flowerManagment/memberPurchesPoints`              |
+| Get My Purches History         | `Authorization: <Salesmen, Member_JWT_TOKEN>`  | GET    | `/api/flowerManagment/getMyPurchesHistory`              |
+| Create Coupon                  | `Authorization: <Manager_JWT_TOKEN>`           | POST   | `/api/flowerManagment/create-coupon`                    |

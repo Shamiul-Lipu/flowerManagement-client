@@ -64,6 +64,14 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["flowers", "discountCoupone", "purchesPoint"],
+  tagTypes: [
+    "flowers",
+    "discountCoupone",
+    "purchesPoint",
+    "getMyPurchesHistory",
+    "todaysSalesHistory",
+    "lastWeeksales",
+    "monthAndYearlySalesHistory",
+  ],
   endpoints: () => ({}),
 });

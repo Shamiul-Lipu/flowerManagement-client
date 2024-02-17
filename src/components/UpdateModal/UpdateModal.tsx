@@ -6,9 +6,6 @@ import {
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Flower } from "../FlowerCard/FlowerCard";
-import { useAppSelector } from "../../redux/hooks";
-import { useCurrentUser } from "../../redux/features/auth/authSlice";
-import { TUser } from "../../types/global";
 
 interface UpdateModalProps {
   flower: Partial<Flower>;
@@ -33,7 +30,6 @@ const UpdateModal: React.FC<UpdateModalProps> = ({ flower, handleModal }) => {
     isSelectedForDelete: flower.isSelectedForDelete,
   });
   const [flowerId, setFlowerId] = useState({});
-  const user = useAppSelector(useCurrentUser) as TUser;
   const [updateFlower] = useUpdateFlowerMutation(flowerId);
   const [addFlower] = useAddFlowerMutation();
   const navigate = useNavigate();
